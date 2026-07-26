@@ -1,0 +1,50 @@
+name: Update signed X Lock state
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: State transition
+        required: true
+        type: choice
+        options: [initialize, lock, grant, refresh]
+      device_id:
+        description: Bound device id
+        required: true
+        type: string
+      ends_at:
+        description: ISO deadline; required only for lock
+        required: false
+        type: string
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: x-lock-state
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Produce signed state
+        env:
+          ACTION_TYPE: ${{ github.event_name == 'schedule' && 'refresh' || inputs.action }}
+          DEVICE_ID: ${{ github.event_name == 'schedule' && vars.DEVICE_ID || inputs.device_id }}
+          ENDS_AT: ${{ inputs.ends_at }}
+          POLICY_PRIVATE_JWK: ${{ secrets.POLICY_PRIVATE_JWK }}
+        run: node scripts/update-state.mjs
+      - name: Commit state
+        run: |
+          git config user.name "x-lock-state-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add state.json
+          git diff --cached --quiet && exit 0
+          git commit -m "state: ${ACTION_TYPE}"
+          git push
+        env:
+          ACTION_TYPE: ${{ github.event_name == 'schedule' && 'refresh' || inputs.action }}
