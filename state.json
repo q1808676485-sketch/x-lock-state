@@ -1,5 +1,10 @@
 {
-  "token": null,
-  "publicKeyJwk": null,
-  "updatedAt": null
+  "token": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IngtbG9jay1naXRodWItdjEifQ.eyJ2ZXJzaW9uIjoxLCJ0eXBlIjoieC1sb2NrLXN0YXRlIiwiZGV2aWNlSWQiOiIwM2Y5OTQ0MS1jZWM0LTRkYmQtYmFiMS1hNGU2MjA5MjJhMTciLCJzZXJ2ZXJUaW1lIjoiMjAyNi0wNy0yNlQxNToyMToyMi44MjJaIiwibG9jayI6bnVsbCwiZ3JhbnQiOm51bGwsImJsb2NrZWQiOmZhbHNlLCJpYXQiOjE3ODUwNzkyODIsImV4cCI6MTc4NTE2NTY4Mn0.HtWOa0t4w10s5tg8P_3HIln6GDiBRSl7Q-nbeUlX3o1fgpuP4ESSf9d6_c4I7b19qyVBZueJSwkHJ6H3uBXq_w",
+  "publicKeyJwk": {
+    "kty": "EC",
+    "x": "tTx2dFIU3fuvvwpKXLANakk0qt4NzNsgv1gcfYgBGUQ",
+    "y": "jiOzU1no40ytihTwFSirxPZCD0AhMYLowahoV4NFXF4",
+    "crv": "P-256"
+  },
+  "updatedAt": "2026-07-26T15:21:22.822Z"
 }
