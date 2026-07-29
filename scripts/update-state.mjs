@@ -1,6 +1,27 @@
 import { createPrivateKey, createPublicKey, randomUUID, sign, verify } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 
+const LOCK_DOMAINS = [
+  "x.com",
+  "twitter.com",
+  "yandex.com",
+  "www.yandex.com",
+  "ya.ru",
+  "www.ya.ru",
+  "yandex.eu",
+  "www.yandex.eu",
+  "yandex.ru",
+  "www.yandex.ru",
+  "yandex.by",
+  "www.yandex.by",
+  "yandex.kz",
+  "www.yandex.kz",
+  "yandex.com.tr",
+  "www.yandex.com.tr",
+  "yandex.uz",
+  "www.yandex.uz",
+];
+
 const file = new URL("../state.json", import.meta.url);
 const action = process.env.ACTION_TYPE || "refresh";
 const deviceId = process.env.DEVICE_ID;
@@ -44,7 +65,7 @@ if (action === "initialize") {
   if (lock && new Date(lock.endsAt) > now) throw new Error("an active lock already exists");
   const endsAt = new Date(process.env.ENDS_AT || "");
   if (Number.isNaN(endsAt.getTime()) || endsAt <= now) throw new Error("ENDS_AT must be a future ISO timestamp");
-  lock = { id: randomUUID(), deviceId, startsAt: now.toISOString(), endsAt: endsAt.toISOString(), domains: ["x.com", "twitter.com"] };
+  lock = { id: randomUUID(), deviceId, startsAt: now.toISOString(), endsAt: endsAt.toISOString(), domains: LOCK_DOMAINS };
   grant = null;
 } else if (action === "grant") {
   if (!lock || new Date(lock.endsAt) <= now) throw new Error("no active lock");
