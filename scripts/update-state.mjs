@@ -1,28 +1,8 @@
 import { createPrivateKey, createPublicKey, randomUUID, sign, verify } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
+import { BASE_RULES, expandLockRules, withCanonicalRules } from "./policy-rules.mjs";
 
-const LOCK_DOMAINS = [
-  "x.com",
-  "twitter.com",
-  "pornhub.com",
-  "xvideos.com",
-  "yandex.com",
-  "www.yandex.com",
-  "ya.ru",
-  "www.ya.ru",
-  "yandex.eu",
-  "www.yandex.eu",
-  "yandex.ru",
-  "www.yandex.ru",
-  "yandex.by",
-  "www.yandex.by",
-  "yandex.kz",
-  "www.yandex.kz",
-  "yandex.com.tr",
-  "www.yandex.com.tr",
-  "yandex.uz",
-  "www.yandex.uz",
-];
+const LOCK_DOMAINS = BASE_RULES.map((rule) => rule.host);
 
 const file = new URL("../state.json", import.meta.url);
 const action = process.env.ACTION_TYPE || "refresh";
@@ -58,6 +38,7 @@ const current = readExisting();
 const now = new Date();
 let lock = current?.lock || null;
 let grant = current?.grant || null;
+if (lock) lock = withCanonicalRules(lock);
 
 if (action === "initialize") {
   if (lock && new Date(lock.endsAt) > now) throw new Error("cannot initialize over an active lock");
@@ -67,8 +48,18 @@ if (action === "initialize") {
   if (lock && new Date(lock.endsAt) > now) throw new Error("an active lock already exists");
   const endsAt = new Date(process.env.ENDS_AT || "");
   if (Number.isNaN(endsAt.getTime()) || endsAt <= now) throw new Error("ENDS_AT must be a future ISO timestamp");
-  lock = { id: randomUUID(), deviceId, startsAt: now.toISOString(), endsAt: endsAt.toISOString(), domains: LOCK_DOMAINS };
+  lock = {
+    id: randomUUID(),
+    deviceId,
+    startsAt: now.toISOString(),
+    endsAt: endsAt.toISOString(),
+    domains: LOCK_DOMAINS,
+    rules: BASE_RULES,
+  };
   grant = null;
+} else if (action === "expand") {
+  if (!lock || new Date(lock.endsAt) <= now) throw new Error("no active lock");
+  lock = expandLockRules(lock, process.env.DOMAIN_HOST, process.env.DOMAIN_MODE);
 } else if (action === "grant") {
   if (!lock || new Date(lock.endsAt) <= now) throw new Error("no active lock");
   if (grant && new Date(grant.endsAt) > now) throw new Error("an active grant already exists");
