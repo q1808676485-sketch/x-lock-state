@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 const LOCK_DOMAINS = [
   "x.com",
   "twitter.com",
+  "pornhub.com",
   "yandex.com",
   "www.yandex.com",
   "ya.ru",
