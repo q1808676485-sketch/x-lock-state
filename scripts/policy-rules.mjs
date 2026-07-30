@@ -6,6 +6,7 @@ export const BASE_RULES = Object.freeze([
   { host: "twitter.com", includeSubdomains: true },
   { host: "pornhub.com", includeSubdomains: true },
   { host: "xvideos.com", includeSubdomains: true },
+  { host: "mrdsk.com", includeSubdomains: true },
   { host: "yandex.com", includeSubdomains: false },
   { host: "www.yandex.com", includeSubdomains: false },
   { host: "ya.ru", includeSubdomains: false },
