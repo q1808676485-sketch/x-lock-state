@@ -21,6 +21,13 @@ test("legacy locks receive canonical matching semantics", () => {
   assert.deepEqual(canonical.rules, BASE_RULES);
 });
 
+test("new locks include the mrdsk.com domain family", () => {
+  assert.deepEqual(
+    BASE_RULES.find((rule) => rule.host === "mrdsk.com"),
+    { host: "mrdsk.com", includeSubdomains: true },
+  );
+});
+
 test("expansion preserves lock identity and deadline", () => {
   const before = legacyLock();
   const after = expandLockRules(before, "Example.COM.", "subdomains");

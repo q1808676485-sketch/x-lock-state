@@ -6,8 +6,8 @@ The ES256 private key remains in the public repository's `POLICY_PRIVATE_JWK` Ac
 
 The Android app reads `state.json` through the public GitHub Contents API and uses the HTTPS `Date` response header as the current server-time anchor. It never trusts the phone wall clock for lock expiry.
 
-New locks start with the X, `pornhub.com`, and `xvideos.com` domain families and
-common exact Yandex Search entry hosts. They also carry explicit signed matching
+New locks start with the X, `pornhub.com`, `xvideos.com`, and `mrdsk.com` domain
+families and common exact Yandex Search entry hosts. They also carry explicit signed matching
 rules. The `expand` workflow action can append a plain DNS hostname in `exact`
 or `subdomains` mode while an active lock exists. It preserves the lock id,
 start time, deadline, and grant and refuses any narrowing transition. Android
