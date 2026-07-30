@@ -5,6 +5,7 @@ const LOCK_DOMAINS = [
   "x.com",
   "twitter.com",
   "pornhub.com",
+  "xvideos.com",
   "yandex.com",
   "www.yandex.com",
   "ya.ru",

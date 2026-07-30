@@ -6,6 +6,6 @@ The ES256 private key remains in the public repository's `POLICY_PRIVATE_JWK` Ac
 
 The Android app reads `state.json` through the public GitHub Contents API and uses the HTTPS `Date` response header as the current server-time anchor. It never trusts the phone wall clock for lock expiry.
 
-New locks contain the fixed X and `pornhub.com` domain families and common exact
-Yandex Search entry hosts. Android applies the matching semantics from its built-in
+New locks contain the fixed X, `pornhub.com`, and `xvideos.com` domain families
+and common exact Yandex Search entry hosts. Android applies the matching semantics from its built-in
 catalog; all entries share the same deadline and temporary grant.
